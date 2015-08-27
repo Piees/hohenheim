@@ -4,13 +4,13 @@ from kivy.uix.image import Image
 from kivy.core.window import Window
 from kivy import metrics
 from kivy.uix.textinput import TextInput
+from kivy.uix.label import Label
+from collections import OrderedDict
 import re
 ###TO DO : inventory
 import os
 path, dirs, files = os.walk("/home/piees/hohenheim/images").next()
 max_maps = len(files)
-sizehelp = []
-sizehelphelp = []
 
 
 class Sprite(Image):
@@ -36,6 +36,7 @@ class HohenGame(Widget):
         self.textinput = TextInput(text='fish',
             x=metrics.dp(10), y=metrics.dp(48), multiline=False,
             width=metrics.dp(470), height=metrics.dp(38))
+        self.cmd = Label(text='fish')
         self.textinput.bind(on_text_validate=self.on_enter)
         self.giant = Sprite(source='images/giant.png', x=metrics.dp(620),
             y=metrics.dp(330))
@@ -57,18 +58,14 @@ class HohenGame(Widget):
         self.background = Sprite(source='images/background.jpg')
         self.add_widget(self.background)
         self.add_widget(self.textinput)
+        self.add_widget(self.cmd)
         self.addobjects()
 
 
     def invx(self, xhelp):
         self.xval = 1150
         try:
-            self.xval = sizehelphelp['%s'%xhelp]['x']
-        except:
-            pass
-        try:
-            pass
-            print(sizehelphelp['%s'%xhelp]['x'])
+            self.xval = self.sizehelphelp['%s'%xhelp]['x']
         except:
             pass
         return self.xval
@@ -76,7 +73,7 @@ class HohenGame(Widget):
     def invy(self, yhelp):
         self.yval = 70
         try:
-            self.yval = sizehelphelp['%s'%yhelp]['y']
+            self.yval = self.sizehelphelp['%s'%yhelp]['y']
         except:
             pass
         return self.yval
@@ -84,7 +81,10 @@ class HohenGame(Widget):
     def refinv(self):
         self.invaxe.pos = (self.invx('axe'),self.invy('axe'))
         self.invdepo.pos = (self.invx('depo'),self.invy('depo'))
+        #self.invdepo.pos = (1300,70)
+        print "depo x"
         print self.invx('depo')
+        print "axe x"
         print self.invx('axe')
 
     def addobjects(self):
@@ -108,24 +108,23 @@ class HohenGame(Widget):
         value.text = ''
 
     def refgame(self):
-        self.refinv()
-        sizehelp = [] ##what's taken (axe)
-        sizehelphelp = {}
+        self.sizehelp = [] ##what's taken (axe)
+        self.sizehelphelp = {}
         xval = 1150
         yval = 70
         for key in self.inv:
-            sizehelp.append(key)
+            self.sizehelp.append(key)
+        self.sizehelp.reverse()
         for x in range(len(self.inv)):
-            sizehelphelp['%s'%sizehelp[x]] = {'x': xval,'y': yval}
-            xval = xval + 50
+            self.sizehelphelp['%s'%self.sizehelp[x]] = {'x': xval,'y': yval}
+            xval += 50
             if xval == 1300:
                 xval = 1150
             if x > 4:
                 yval = 20
+        self.refinv()
         try:
             pass
-            print sizehelphelp['axe']['x']
-            print sizehelphelp['depo']['x']
         except:
             pass
         self.remove_widget(self.background)
