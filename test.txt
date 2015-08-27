@@ -1,0 +1,123 @@
+[39m[0m[36m# Check configuration tokens[39m[0m
+[39m[0m[36m# Ensure build layout[39m[0m
+[39m[0m[36m# Check configuration tokens[39m[0m
+[39m[0m[36m# Preparing build[39m[0m
+[39m[0m[36m# Check requirements for android[39m[0m
+[39m[0m[30m[1m# Run 'dpkg --version'[39m[0m
+[39m[0m[30m[1m# Cwd None[39m[0m
+Debian `dpkg' package management program version 1.17.5 (amd64).
+This is free software; see the GNU General Public License version 2 or
+later for copying conditions. There is NO warranty.
+[39m[0m[30m[1m# Search for Git (git)[39m[0m
+[39m[0m[30m[1m#  -> found at /usr/bin/git[39m[0m
+[39m[0m[30m[1m# Search for Cython (cython)[39m[0m
+[39m[0m[30m[1m#  -> found at /usr/local/bin/cython[39m[0m
+[39m[0m[30m[1m# Search for Java compiler (javac)[39m[0m
+[39m[0m[30m[1m#  -> found at /usr/lib/jvm/java-7-oracle/bin/javac[39m[0m
+[39m[0m[30m[1m# Search for Java keytool (keytool)[39m[0m
+[39m[0m[30m[1m#  -> found at /usr/lib/jvm/java-7-oracle/jre/bin/keytool[39m[0m
+[39m[0m[36m# Install platform[39m[0m
+[39m[0m[36m# Apache ANT found at /home/piees/.buildozer/android/platform/apache-ant-1.9.4[39m[0m
+[39m[0m[36m# Android SDK found at /home/piees/.buildozer/android/platform/android-sdk-21[39m[0m
+[39m[0m[36m# Android NDK found at /home/piees/.buildozer/android/platform/android-ndk-r9c[39m[0m
+[39m[0m[36m# Check application requirements[39m[0m
+[39m[0m[30m[1m# Run './distribute.sh -l'[39m[0m
+[39m[0m[30m[1m# Cwd /home/piees/hohenheim/.buildozer/android/platform/python-for-android[39m[0m
+Available modules: android apsw audiostream bidi boost cherrypy c_igraph cprotobuf cymunk django docutils ecdsa enum34 evdev ffmpeg ffmpeg2 ffpyplayer freetype gevent greenlet harfbuzz hostpython igraph jpeg kivent_core kivent_cymunk kivy leveldb libevent libpq libsodium libswift libtorrent libxml2 libxslt libyaml lxml m2crypto midistream msgpack mysql_connector netifaces numpy opencv openssl paramiko pil plyer plyvel png polygon protobuf psutil psycopg2 pyasn1 pycrypto pygame pyjnius pylibpd pyopenssl pyparsing pyqrcode python pyyaml sdl setuptools six sqlalchemy sqlite3 storm swift thrift twisted txws wokkel zeroconf zope
+[39m[0m[30m[1m# Application requirements already installed, pass[39m[0m
+[39m[0m[36m# Check garden requirements[39m[0m
+[39m[0m[36m# Compile platform[39m[0m
+[39m[0m[30m[1m# Run './distribute.sh -l'[39m[0m
+[39m[0m[30m[1m# Cwd /home/piees/hohenheim/.buildozer/android/platform/python-for-android[39m[0m
+Available modules: android apsw audiostream bidi boost cherrypy c_igraph cprotobuf cymunk django docutils ecdsa enum34 evdev ffmpeg ffmpeg2 ffpyplayer freetype gevent greenlet harfbuzz hostpython igraph jpeg kivent_core kivent_cymunk kivy leveldb libevent libpq libsodium libswift libtorrent libxml2 libxslt libyaml lxml m2crypto midistream msgpack mysql_connector netifaces numpy opencv openssl paramiko pil plyer plyvel png polygon protobuf psutil psycopg2 pyasn1 pycrypto pygame pyjnius pylibpd pyopenssl pyparsing pyqrcode python pyyaml sdl setuptools six sqlalchemy sqlite3 storm swift thrift twisted txws wokkel zeroconf zope
+[39m[0m[30m[1m# Clean and build python-for-android[39m[0m
+[39m[0m[30m[1m# Remove directory and subdirectory /home/piees/hohenheim/.buildozer/android/platform/python-for-android/dist/myapp[39m[0m
+[39m[0m[30m[1m# Run './distribute.sh -m "kivy" -d "myapp"'[39m[0m
+[39m[0m[30m[1m# Cwd /home/piees/hohenheim/.buildozer/android/platform/python-for-android[39m[0m
+[34;01mCheck build dependencies for Ubuntu[39;49;00m
+[31;01mPackages missing: cython [39;49;00m
+[31;01mIt might break the compilation, except if you installed thoses packages manually.[39;49;00m
+[34;01mCheck environment[39;49;00m
+[30;01mSDK located at /home/piees/.buildozer/android/platform/android-sdk-21[39;49;00m
+[30;01mNDK located at /home/piees/.buildozer/android/platform/android-ndk-r9c[39;49;00m
+[30;01mNDK version is r9c[39;49;00m
+[30;01mAPI level set to 14[39;49;00m
+[34;01mCheck NDK location[39;49;00m
+[34;01mCheck mandatory tools[39;49;00m
+[34;01mDistribution will be located at /home/piees/hohenheim/.buildozer/android/platform/python-for-android/dist/myapp[39;49;00m
+[34;01mEntering in ARM environment[39;49;00m
+[30;01mCompiler found at /home/piees/.buildozer/android/platform/android-ndk-r9c/toolchains/arm-linux-androideabi-4.8/prebuilt/linux-x86_64/bin//arm-linux-androideabi-gcc[39;49;00m
+[30;01mPATH is /home/piees/.buildozer/android/platform/android-ndk-r9c/toolchains/arm-linux-androideabi-4.8/prebuilt/linux-x86/bin/:/home/piees/.buildozer/android/platform/android-ndk-r9c/toolchains/arm-linux-androideabi-4.8/prebuilt/linux-x86_64/bin/:/home/piees/.buildozer/android/platform/android-ndk-r9c:/home/piees/.buildozer/android/platform/android-sdk-21/tools:/home/piees/.buildozer/android/platform/apache-ant-1.9.4/bin:/home/piees/pidcat:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/piees/pidcat/pidcat.py:/home/piees/pidcat/pidcat.py:/home/piees/.buildozer/android/platform-tools:/home/piees/.buildozer/android/tools[39;49;00m
+[34;01mLeaving ARM environment[39;49;00m
+[30;01mRead kivy recipe[39;49;00m
+[30;01mModule kivy depend on pygame pyjnius android[39;49;00m
+[30;01mRead pygame recipe[39;49;00m
+[30;01mModule pygame depend on python sdl[39;49;00m
+[30;01mRead pyjnius recipe[39;49;00m
+[30;01mModule pyjnius depend on python sdl[39;49;00m
+[30;01mRead android recipe[39;49;00m
+[30;01mModule android depend on pygame[39;49;00m
+[30;01mRead python recipe[39;49;00m
+[30;01mModule python depend on hostpython[39;49;00m
+[30;01mRead sdl recipe[39;49;00m
+[30;01mModule sdl depend on python[39;49;00m
+[30;01mIgnored python, already processed[39;49;00m
+[30;01mIgnored sdl, already processed[39;49;00m
+[30;01mIgnored pygame, already processed[39;49;00m
+[30;01mRead hostpython recipe[39;49;00m
+[30;01mIgnored python, already processed[39;49;00m
+[34;01mModules changed to hostpython python sdl pygame pyjnius android kivy[39;49;00m
+[34;01mPure-Python modules changed to [39;49;00m
+[34;01mRun get packages[39;49;00m
+[30;01mDownload package for hostpython[39;49;00m
+[30;01mModule hostpython already downloaded[39;49;00m
+[30;01mDownload package for python[39;49;00m
+[30;01mModule python already downloaded[39;49;00m
+[30;01mDownload package for sdl[39;49;00m
+[30;01mNo package for sdl[39;49;00m
+[30;01mDownload package for pygame[39;49;00m
+[30;01mModule pygame already downloaded[39;49;00m
+[30;01mDownload package for pyjnius[39;49;00m
+[30;01mModule pyjnius already downloaded[39;49;00m
+[30;01mDownload package for android[39;49;00m
+[30;01mNo package for android[39;49;00m
+[30;01mDownload package for kivy[39;49;00m
+[30;01mModule kivy already downloaded[39;49;00m
+[34;01mRun prebuild[39;49;00m
+[30;01mCall prebuild_hostpython[39;49;00m
+[30;01mCall prebuild_python[39;49;00m
+[30;01mCall prebuild_sdl[39;49;00m
+[30;01mCall prebuild_pygame[39;49;00m
+[30;01mCall prebuild_pyjnius[39;49;00m
+[30;01mCall prebuild_android[39;49;00m
+[30;01mCall prebuild_kivy[39;49;00m
+[34;01mRun build[39;49;00m
+[30;01mSkipped build_hostpython[39;49;00m
+[30;01mSkipped build_python[39;49;00m
+[30;01mSkipped build_sdl[39;49;00m
+[30;01mSkipped build_pygame[39;49;00m
+[30;01mSkipped build_pyjnius[39;49;00m
+[30;01mSkipped build_android[39;49;00m
+[30;01mCall build_kivy[39;49;00m
+[34;01mEntering in ARM environment[39;49;00m
+[30;01mCompiler found at /home/piees/.buildozer/android/platform/android-ndk-r9c/toolchains/arm-linux-androideabi-4.8/prebuilt/linux-x86_64/bin//arm-linux-androideabi-gcc[39;49;00m
+
+Cython check avoided.
+Using this graphics system: OpenGL ES 2
+running build_ext
+Build configuration is:
+ * use_rpi = 0
+ * use_opengl_es2 = 1
+ * use_opengl_debug = 0
+ * use_glew = 0
+ * use_sdl2 = 0
+ * use_ios = 0
+ * use_mesagl = 0
+ * use_x11 = 0
+ * use_gstreamer = 0
+ * use_avfoundation = 0
+ * use_osx_frameworks = 0
+ * debug = False
+Detected compiler is unix
+building 'kivy.graphics.vbo' extension
+arm-linux-androideabi-gcc -DANDROID -mandroid -fomit-frame-pointer --sysroot /home/piees/.buildozer/android/platform/android-ndk-r9c/platforms/android-14/arch-arm -DNDEBUG -DANDROID -mandroid -fomit-frame-pointer --sysroot /home/piees/.buildozer/android/platform/android-ndk-r9c/platforms/android-14/arch-arm -fPIC -I/home/piees/.buildozer/android/platform/android-ndk-r9c/platforms/android-14/arch-arm/usr/include -I/home/piees/hohenheim/.buildozer/android/platform/python-for-android/build/python-install/include/python2.7 -c kivy/graphics/vbo.c -o build/temp.linux-x86_64-2.7/kivy/graphics/vbo.o
