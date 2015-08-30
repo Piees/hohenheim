@@ -7,27 +7,12 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.label import Label
 from collections import OrderedDict
 import re
-###TO DO : inventory
-import os
-path, dirs, files = os.walk("/home/piees/hohenheim/images").next()
-max_maps = len(files)
 
 
 class Sprite(Image):
     def __init__(self, **kwargs):
         super(Sprite, self).__init__(**kwargs)
         self.size = self.texture_size
-
-def take(item):
-    switch = False
-    for key in HohenGame.gm['takeables']:
-        if key == item:
-            switch = True
-    if switch == True:
-        HohenGame.gm['takeables'][item] = False
-        HohenGame.inv[item] = True
-    print HohenGame.gm
-    print HohenGame.inv
 
 
 class HohenGame(Widget):
@@ -36,7 +21,9 @@ class HohenGame(Widget):
         self.textinput = TextInput(text='fish',
             x=metrics.dp(10), y=metrics.dp(48), multiline=False,
             width=metrics.dp(470), height=metrics.dp(38))
-        self.cmd = Label(text='fish')
+        self.cmd = Label(text="Welcome to Hohenheim!", x=metrics.dp(196),
+            y=metrics.dp(130), text_size=(metrics.dp(460), metrics.dp(160)),
+            markup=True)
         self.textinput.bind(on_text_validate=self.on_enter)
         self.giant = Sprite(source='images/giant.png', x=metrics.dp(620),
             y=metrics.dp(330))
@@ -61,6 +48,25 @@ class HohenGame(Widget):
         self.add_widget(self.cmd)
         self.addobjects()
 
+    def cmdb(self, statement, switch):
+        if switch == 'bold':
+            self.cmd.text += "[b][i]\n" + statement + '[/i][/b]'
+        else: self.cmd.text += statement
+
+    def take(self, item):
+        self.switch = False
+        for key in self.gm['takeables']:
+            if key == item:
+                if self.gm['takeables'][item] == True:
+                    self.switch = True
+                elif self.inv[item] == True:
+                    self.cmdb("You already have " + item, 'bold')
+        if self.switch == True:
+            self.gm['takeables'][item] = False
+            self.inv[item] = True
+            #self.cmd.text += "[b][i]\nYou took " + item + '[/i][/b]'
+            self.cmdb("You took " + item, 'bold')
+
 
     def invx(self, xhelp):
         self.xval = 1150
@@ -82,10 +88,6 @@ class HohenGame(Widget):
         self.invaxe.pos = (self.invx('axe'),self.invy('axe'))
         self.invdepo.pos = (self.invx('depo'),self.invy('depo'))
         #self.invdepo.pos = (1300,70)
-        print "depo x"
-        print self.invx('depo')
-        print "axe x"
-        print self.invx('axe')
 
     def addobjects(self):
         for key in self.gm:
@@ -99,11 +101,14 @@ class HohenGame(Widget):
                 self.add_widget(self.invhelp['%s'%key])
 
     def on_enter(self, value):
+        print self.gm
+        print self.inv
+        self.cmd.text += '\n'+self.textinput.text
         if re.search('^take',value.text) != None:
             if value.text[5:] == '':
                 pass
             else:
-                take(value.text[5:])
+                self.take(value.text[5:])
         self.refgame()
         value.text = ''
 
@@ -133,10 +138,12 @@ class HohenGame(Widget):
         self.remove_widget(self.depo)
         self.remove_widget(self.invaxe)
         self.remove_widget(self.invdepo)
+        self.remove_widget(self.cmd)
         self.add_widget(self.background)
         self.addobjects()
         self.remove_widget(self.textinput)
         self.add_widget(self.textinput)
+        self.add_widget(self.cmd)
 
 class HohenApp(App):
     def build(self):
