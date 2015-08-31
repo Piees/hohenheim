@@ -18,7 +18,7 @@ class Sprite(Image):
 class HohenGame(Widget):
     def __init__(self):
         super(HohenGame, self).__init__()
-        self.textinput = TextInput(text='fish',
+        self.textinput = TextInput(hint_text='Your commands here..',
             x=metrics.dp(10), y=metrics.dp(48), multiline=False,
             width=metrics.dp(470), height=metrics.dp(38))
         self.cmd = Label(text="Welcome to Hohenheim!", x=metrics.dp(196),
