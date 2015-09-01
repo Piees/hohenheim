@@ -5,7 +5,9 @@ from kivy.core.window import Window
 from kivy import metrics
 from kivy.uix.textinput import TextInput
 from kivy.uix.label import Label
+from kivy.clock import Clock
 from collections import OrderedDict
+from kivy.config import Config
 import re
 
 
@@ -57,13 +59,12 @@ class HohenGame(Widget):
         self.switch = False
         for key in self.gm['takeables']:
             if key == item:
-                if self.gm['takeables'][item] == True:
+                if self.gm['takeables'][item]['state'] == 'game':
                     self.switch = True
-                elif self.inv[item] == True:
+                elif self.gm['takeables'][item]['state'] == 'inv':
                     self.cmdb("You already have " + item, 'bold')
         if self.switch == True:
-            self.gm['takeables'][item] = False
-            self.inv[item] = True
+            self.gm['takeables'][item]['state'] = 'inv'
             #self.cmd.text += "[b][i]\nYou took " + item + '[/i][/b]'
             self.cmdb("You took " + item, 'bold')
 
@@ -94,10 +95,9 @@ class HohenGame(Widget):
             if self.gm['%s'%key] == True:
                 self.add_widget(self.gmhelp['%s'%key])
         for key in self.gm['takeables']:
-            if self.gm['takeables']['%s'%key] == True:
+            if self.gm['takeables']['%s'%key]['state'] == 'game':
                 self.add_widget(self.takehelp['%s'%key])
-        for key in self.inv:
-            if self.inv['%s'%key] == True:
+            if self.gm['takeables']['%s'%key]['state'] == 'inv':
                 self.add_widget(self.invhelp['%s'%key])
 
     def on_enter(self, value):
@@ -112,15 +112,22 @@ class HohenGame(Widget):
         self.refgame()
         value.text = ''
 
+
+#    def _refocus_txtinp(self,*args):
+#        self.cmd.focus = True
+#        print "hi"
+
     def refgame(self):
         self.sizehelp = [] ##what's taken (axe)
-        self.sizehelphelp = {}
+        self.sizehelphelp = {} ##FIX THIS FOR NEW SYNTAX OF INV
         xval = 1150
         yval = 70
-        for key in self.inv:
-            self.sizehelp.append(key)
+        for key in self.gm['takeables']:
+            if self.gm['takeables'][key]['state'] == 'inv':
+                self.sizehelp.append(key)
         self.sizehelp.reverse()
-        for x in range(len(self.inv)):
+        print self.sizehelp
+        for x in range(len(self.sizehelp)):
             self.sizehelphelp['%s'%self.sizehelp[x]] = {'x': xval,'y': yval}
             xval += 50
             if xval == 1300:
@@ -144,19 +151,23 @@ class HohenGame(Widget):
         self.remove_widget(self.textinput)
         self.add_widget(self.textinput)
         self.add_widget(self.cmd)
+#        Clock.schedule_once(self._refocus_txtinp, 2)
+
 
 class HohenApp(App):
     def build(self):
         Game = Widget()
         Game.add_widget(HohenGame())
-        Window.size = int(metrics.dp(1366)),int(metrics.dp(768))
+        Config.set('graphics', 'borderless', '1')
+        Config.write()
+        #Window.size = int(metrics.dp(1366)),int(metrics.dp(768))
         return Game
 
 
 if __name__ == '__main__':
     HohenGame.gm = {'takeables': {
-                    'axe': True,
-                    'depo': True},
+                    'axe': {'state': 'game'},
+                    'depo': {'state': 'game'}},
                     'giant': True}
     HohenGame.inv = {}
     HohenApp().run()
