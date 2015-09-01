@@ -158,7 +158,8 @@ class HohenApp(App):
     def build(self):
         Game = Widget()
         Game.add_widget(HohenGame())
-        #Window.size = int(metrics.dp(1366)),int(metrics.dp(768))
+        Window.size = int(metrics.dp(1366)),int(metrics.dp(768))
+        #Window.fullscreen = True
         return Game
 
 
@@ -168,8 +169,8 @@ if __name__ == '__main__':
                     'depo': {'state': 'game'}},
                     'giant': True}
     HohenGame.inv = {}
-    Config.set("graphics", "minimum_width", "1366")
-    Config.set("graphics", "minimum_height", "720")
-    Config.set('graphics', 'borderless', '1')
-    Config.write()
+    #Config.set("graphics", "minimum_width", "1366")
+    #Config.set("graphics", "minimum_height", "720")
+    #Config.set('graphics', 'borderless', '0')
+    #Config.write()
     HohenApp().run()
