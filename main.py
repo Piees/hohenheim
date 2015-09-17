@@ -7,15 +7,21 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.label import Label
 from kivy.clock import Clock
 from collections import OrderedDict
-from kivy.config import Config
+#from kivy.config import Config
+from kivy.uix.scrollview import ScrollView
+from kivy.properties import StringProperty
 import re
 
+
+class ScrollableLabel(ScrollView):
+    text = StringProperty('')
 
 class Sprite(Image):
     def __init__(self, **kwargs):
         super(Sprite, self).__init__(**kwargs)
         self.size = self.texture_size
 
+commands = "Commands:\nTake <item>"
 
 class HohenGame(Widget):
     def __init__(self):
@@ -41,14 +47,30 @@ class HohenGame(Widget):
             x=metrics.dp(self.invx('depo')),
             y=metrics.dp(self.invy('depo')),
             width=metrics.dp(30))
+        self.background = Sprite(source='images/background_nobridge.jpg')
+        self.bridge = Sprite(source='images/bridge.jpg',
+                                    x=metrics.dp(500),
+                                    y=metrics.dp(260))
+        self.bridge_active = Sprite(source='images/bridge_active.jpg',
+                                    x=metrics.dp(500),
+                                    y=metrics.dp(260))
         self.takehelp = {'axe': self.axe, 'depo': self.depo}
-        self.gmhelp = {'giant': self.giant}
+        self.gmhelp = {'giant': self.giant, 'bridge': self.bridge,
+                       'bridge_active': self.bridge_active}
         self.invhelp = {'axe': self.invaxe, 'depo': self.invdepo}
-        self.background = Sprite(source='images/background.jpg')
         self.add_widget(self.background)
         self.add_widget(self.textinput)
         self.add_widget(self.cmd)
         self.addobjects()
+
+    def use(self, user, usee):
+        pass
+        print self.gm['takeables'][user]['use']
+        if self.gm['takeables'][user]['use'] == 'break':
+            self.gm['bridge'] = False
+            self.gm['takeables'][user]['state'] = ''
+            self.cmdb('You use %s on %s and it breaks'% (user, usee), 'bold')
+            print("this will remove the bridge and kill the troll")
 
     def cmdb(self, statement, switch):
         if switch == 'bold':
@@ -94,6 +116,8 @@ class HohenGame(Widget):
         for key in self.gm:
             if self.gm['%s'%key] == True:
                 self.add_widget(self.gmhelp['%s'%key])
+            elif self.gm['%s'%key] == 'active':
+                self.add_widget(self.gmhelp['%s_active'%key])
         for key in self.gm['takeables']:
             if self.gm['takeables']['%s'%key]['state'] == 'game':
                 self.add_widget(self.takehelp['%s'%key])
@@ -101,14 +125,22 @@ class HohenGame(Widget):
                 self.add_widget(self.invhelp['%s'%key])
 
     def on_enter(self, value):
-        print self.gm
-        print self.inv
-        self.cmd.text += '\n'+self.textinput.text
+        #print self.gm
+        #print self.inv
+        if self.textinput.text != '':
+            self.cmd.text += '\n'+self.textinput.text
         if re.search('^take',value.text) != None:
             if value.text[5:] == '':
                 pass
             else:
                 self.take(value.text[5:])
+        elif value.text == 'commands' or value.text == 'cmd':
+            self.cmdb(commands, 'bold')
+        elif re.search('^take', value.text) != '':
+            if value.text[5:] == '':
+                pass
+            else:
+                self.use('axe','bridge')
         self.refgame()
         value.text = ''
 
@@ -117,8 +149,16 @@ class HohenGame(Widget):
 #        self.cmd.focus = True
 #        print "hi"
 
+    def checkgiant(self):
+        if self.gm['giant'] == True and self.gm['bridge'] == False:
+            self.cmdb('The giant has no footing, it falls into the chasm',
+                'bold')
+            self.gm['giant'] = False
+
+
     def refgame(self):
-        self.sizehelp = [] ##what's taken (axe)
+        self.checkgiant()
+        self.sizehelp = []
         self.sizehelphelp = {} ##FIX THIS FOR NEW SYNTAX OF INV
         xval = 1150
         yval = 70
@@ -126,7 +166,7 @@ class HohenGame(Widget):
             if self.gm['takeables'][key]['state'] == 'inv':
                 self.sizehelp.append(key)
         self.sizehelp.reverse()
-        print self.sizehelp
+        #print self.sizehelp
         for x in range(len(self.sizehelp)):
             self.sizehelphelp['%s'%self.sizehelp[x]] = {'x': xval,'y': yval}
             xval += 50
@@ -139,16 +179,13 @@ class HohenGame(Widget):
             pass
         except:
             pass
-        self.remove_widget(self.background)
-        self.remove_widget(self.giant)
-        self.remove_widget(self.axe)
-        self.remove_widget(self.depo)
-        self.remove_widget(self.invaxe)
-        self.remove_widget(self.invdepo)
-        self.remove_widget(self.cmd)
+        self.clear_widgets()
         self.add_widget(self.background)
+#        if self.gm['takeables']['axe']['state'] == 'inv':
+#            self.gm['bridge'] == 'active'
+#        elif self.gm['takeables']['axe']['state'] == 'game':
+#            self.gm['bridge'] == True
         self.addobjects()
-        self.remove_widget(self.textinput)
         self.add_widget(self.textinput)
         self.add_widget(self.cmd)
 #        Clock.schedule_once(self._refocus_txtinp, 2)
@@ -165,9 +202,10 @@ class HohenApp(App):
 
 if __name__ == '__main__':
     HohenGame.gm = {'takeables': {
-                    'axe': {'state': 'game'},
+                    'axe': {'state': 'game', 'use': 'break'},
                     'depo': {'state': 'game'}},
-                    'giant': True}
+                    'giant': True,
+                    'bridge': True}
     HohenGame.inv = {}
     #Config.set("graphics", "minimum_width", "1366")
     #Config.set("graphics", "minimum_height", "720")

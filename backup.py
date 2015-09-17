@@ -7,14 +7,21 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.label import Label
 from kivy.clock import Clock
 from collections import OrderedDict
+#from kivy.config import Config
+from kivy.uix.scrollview import ScrollView
+from kivy.properties import StringProperty
 import re
 
+
+class ScrollableLabel(ScrollView):
+    text = StringProperty('')
 
 class Sprite(Image):
     def __init__(self, **kwargs):
         super(Sprite, self).__init__(**kwargs)
         self.size = self.texture_size
 
+commands = "Commands:\nTake <item>"
 
 class HohenGame(Widget):
     def __init__(self):
@@ -49,6 +56,14 @@ class HohenGame(Widget):
         self.add_widget(self.cmd)
         self.addobjects()
 
+    def use(self, user, usee):
+        pass
+#        if user == 'axe':
+#            self.gm['takeables'][user]['use']
+        if self.gm['takeables'][user]['use'] == 'break':
+            pass #remove bridge
+            print("this will remove the bridge and kill the troll")
+
     def cmdb(self, statement, switch):
         if switch == 'bold':
             self.cmd.text += "[b][i]\n" + statement + '[/i][/b]'
@@ -60,7 +75,7 @@ class HohenGame(Widget):
             if key == item:
                 if self.gm['takeables'][item]['state'] == 'game':
                     self.switch = True
-                elif self.gm['takeables'][item]['state'] == True:
+                elif self.gm['takeables'][item]['state'] == 'inv':
                     self.cmdb("You already have " + item, 'bold')
         if self.switch == True:
             self.gm['takeables'][item]['state'] = 'inv'
@@ -102,12 +117,20 @@ class HohenGame(Widget):
     def on_enter(self, value):
         print self.gm
         print self.inv
-        self.cmd.text += '\n'+self.textinput.text
+        if self.textinput.text != '':
+            self.cmd.text += '\n'+self.textinput.text
         if re.search('^take',value.text) != None:
             if value.text[5:] == '':
                 pass
             else:
                 self.take(value.text[5:])
+        elif value.text == 'commands' or value.text == 'cmd':
+            self.cmdb(commands, 'bold')
+        elif re.search('^take', value.text) != None:
+            if value.text[5:] == '':
+                pass
+            else:
+                self.use('axe','bridge')
         self.refgame()
         value.text = ''
 
@@ -122,10 +145,11 @@ class HohenGame(Widget):
         xval = 1150
         yval = 70
         for key in self.gm['takeables']:
-            if self.gm['takeables'] == 'inv':
+            if self.gm['takeables'][key]['state'] == 'inv':
                 self.sizehelp.append(key)
         self.sizehelp.reverse()
-        for x in range(len(self.gm['takeables'])):
+        print self.sizehelp
+        for x in range(len(self.sizehelp)):
             self.sizehelphelp['%s'%self.sizehelp[x]] = {'x': xval,'y': yval}
             xval += 50
             if xval == 1300:
@@ -157,13 +181,18 @@ class HohenApp(App):
         Game = Widget()
         Game.add_widget(HohenGame())
         Window.size = int(metrics.dp(1366)),int(metrics.dp(768))
+        #Window.fullscreen = True
         return Game
 
 
 if __name__ == '__main__':
     HohenGame.gm = {'takeables': {
-                    'axe': {'state': 'game'},
+                    'axe': {'state': 'game', 'use': 'break'},
                     'depo': {'state': 'game'}},
                     'giant': True}
     HohenGame.inv = {}
+    #Config.set("graphics", "minimum_width", "1366")
+    #Config.set("graphics", "minimum_height", "720")
+    #Config.set('graphics', 'borderless', '0')
+    #Config.write()
     HohenApp().run()
